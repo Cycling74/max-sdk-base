@@ -8,7 +8,7 @@
 
 // include this outside of the namespace, and
 // before any Max headers can include ext_prefix.h
-#include "ext_prefix_includes.h"
+#include "max-includes/ext_prefix_includes.h"
 
 namespace c74 {
 namespace max {
