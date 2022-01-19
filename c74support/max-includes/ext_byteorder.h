@@ -5,6 +5,11 @@
 #include "ext_common.h"
 
 #ifdef MAC_VERSION
+
+#ifndef TARGET_RT_LITTLE_ENDIAN
+#define TARGET_RT_LITTLE_ENDIAN 0
+#endif
+
 #if TARGET_RT_LITTLE_ENDIAN
 #define C74_LITTLE_ENDIAN 1
 #define C74_BIG_ENDIAN 0

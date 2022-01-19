@@ -7,6 +7,10 @@
 
 BEGIN_USING_C_LINKAGE
 
+#ifndef TARGET_API_MAC_CARBON
+#define TARGET_API_MAC_CARBON 0
+#endif
+
 #ifndef strncpy_zero
 /**	Copy the contents of one string to another, in a manner safer than the standard strcpy() or strncpy().
  	This is the prefered function to use for this operation in Max.

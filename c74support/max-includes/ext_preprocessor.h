@@ -103,6 +103,9 @@
 #define C74_IS_EMPTY_CASE_0001			,
 #define C74_IS_EMPTY_BRACKET_TEST(...)	,
 
+#ifndef _MSC_VER
+#define _MSC_VER 0
+#endif
 
 // C74_VA_NUM_ARGS() is a very nifty macro to retrieve the number of arguments handed to a variable-argument macro.
 // unfortunately, VS 2010 still has this preprocessor bug which treats a __VA_ARGS__ argument as being one single parameter:

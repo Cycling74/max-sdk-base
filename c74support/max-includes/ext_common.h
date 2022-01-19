@@ -18,6 +18,9 @@
 
 #endif
 
+#ifndef C74_NO_CONST
+#define C74_NO_CONST 0
+#endif
 
 #if C74_NO_CONST
 #define C74_CONST
