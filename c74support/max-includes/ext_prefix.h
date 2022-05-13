@@ -204,6 +204,8 @@
 // Can be disabled by defining C74_ENABLE_STATIC_ASSERT to be 0 before including max headers
 #if defined(_DEBUG) && !defined(C74_ENABLE_STATIC_ASSERT)
 #define C74_ENABLE_STATIC_ASSERT 1
+#else
+#define C74_ENABLE_STATIC_ASSERT 0
 #endif
 #if C74_ENABLE_STATIC_ASSERT
 #if (__cplusplus >= 201103L)
