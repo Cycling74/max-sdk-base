@@ -26,4 +26,4 @@ target_include_directories(${target}
 		"${CMAKE_CURRENT_SOURCE_DIR}/c74support/max-includes"
 		"${CMAKE_CURRENT_SOURCE_DIR}/c74support/msp-includes"
 )
-set_target_properties(${target} PROPERTIES FOLDER "Libraries")
+set_target_properties(${target} PROPERTIES FOLDER "C74_Libraries")
