@@ -36,8 +36,6 @@ target_include_directories(${target}
 )
 set_target_properties(${target} PROPERTIES FOLDER "C74_Libraries")
 
-
-
 # Link to precompiled libraries
 set(C74_SUPPORT_DIR "${CMAKE_CURRENT_SOURCE_DIR}/c74support")
 set(MAX_SDK_INCLUDES "${C74_SUPPORT_DIR}/max-includes")
