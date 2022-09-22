@@ -1,6 +1,7 @@
 # Copyright 2018 The Max-API Authors. All rights reserved.
 # Use of this source code is governed by the MIT License found in the License.md file.
 
+include("${CMAKE_CURRENT_LIST_DIR}/git-rev.cmake")
 
 # This command creates a project as well as a libary target with the specified name. 
 # The list of sources which is passed will be added to the target. 
@@ -115,29 +116,10 @@ function(add_max_target target)
 		set_target_properties(${target} PROPERTIES CXX_STANDARD 17)
 		set_target_properties(${target} PROPERTIES CXX_STANDARD_REQUIRED ON)
 	endif ()
+	
 
-
-	# Output
+	# Configuration and link to precompiled libs (the latter not anymore, instead link against max-sdk-base library which links against these)
 	if (APPLE)
-		find_library(
-			MSP_LIBRARY "MaxAudioAPI"
-			REQUIRED
-			PATHS "${MAX_SDK_MSP_INCLUDES}"
-			NO_DEFAULT_PATH
-			#only use the specific path above, don't look in system root
-			#this enables cross compilation to provide an alternative root
-			#but also find this specific path
-			NO_CMAKE_FIND_ROOT_PATH
-		)
-		target_link_libraries(${target} PUBLIC ${MSP_LIBRARY})
-		find_library(
-			JITTER_LIBRARY "JitterAPI"
-			REQUIRED
-			PATHS "${MAX_SDK_JIT_INCLUDES}"
-			NO_DEFAULT_PATH
-			NO_CMAKE_FIND_ROOT_PATH
-		)
-		target_link_libraries(${target} PUBLIC ${JITTER_LIBRARY})
 		if ("${target}" MATCHES "jit.gl.*")
 			target_link_libraries(${target} PUBLIC "-framework OpenGL")
 		endif()	
@@ -155,10 +137,6 @@ function(add_max_target target)
 				include_directories(${OPENGL_INCLUDE_DIR})
 				target_link_libraries(${target} PUBLIC ${OPENGL_LIBRARIES})
 			endif()
-
-			target_link_libraries(${target} PUBLIC ${MaxAPI_LIB})
-			target_link_libraries(${target} PUBLIC ${MaxAudio_LIB})
-			target_link_libraries(${target} PUBLIC ${Jitter_LIB})
 		endif ()
 	
 		set_target_properties(${target} PROPERTIES SUFFIX ".mxe64")
