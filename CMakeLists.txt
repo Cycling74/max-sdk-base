@@ -10,8 +10,8 @@ set_property(GLOBAL PROPERTY C74_MAX_SDK_BASE_DIR "${CMAKE_CURRENT_SOURCE_DIR}")
 include(script/add_max_target.cmake)
 
 
-# Create interface lib for max-sdk-base
-set(target max-sdk-base)
+# Create interface lib for max-sdk-base headers
+set(target max-sdk-base-headers)
 add_library(${target} INTERFACE 
 	"c74support/c74_jitter.h"
 	"c74support/c74_max.h"
@@ -19,7 +19,7 @@ add_library(${target} INTERFACE
 	"c74support/c74_ui.h"
 	"c74support/c74_ui_graphics.h"
 )
-set_target_properties(${target} PROPERTIES LINKER_LANGUAGE CXX)
+set_target_properties(${target} PROPERTIES FOLDER "C74_Libraries")
 
 
 
@@ -36,12 +36,18 @@ target_include_directories(${target}
 )
 set_target_properties(${target} PROPERTIES FOLDER "C74_Libraries")
 
+
+set(target max-sdk-base)
+add_library(${target} INTERFACE)
+target_link_libraries(${target} INTERFACE max-sdk-base-headers)
+set_target_properties(${target} PROPERTIES LINKER_LANGUAGE CXX)
+set_target_properties(${target} PROPERTIES FOLDER "C74_Libraries")
+
 # Link to precompiled libraries
 set(C74_SUPPORT_DIR "${CMAKE_CURRENT_SOURCE_DIR}/c74support")
 set(MAX_SDK_INCLUDES "${C74_SUPPORT_DIR}/max-includes")
 set(MAX_SDK_MSP_INCLUDES "${C74_SUPPORT_DIR}/msp-includes")
 set(MAX_SDK_JIT_INCLUDES "${C74_SUPPORT_DIR}/jit-includes")
-
 if (APPLE)
 	find_library(MSP_LIBRARY "MaxAudioAPI" REQUIRED
 		PATHS "${MAX_SDK_MSP_INCLUDES}"

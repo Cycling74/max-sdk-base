@@ -54,6 +54,9 @@ macro(c74_set_include_paths)
 	set(MAX_SDK_INCLUDES "${C74_SUPPORT_DIR}/max-includes")
 	set(MAX_SDK_MSP_INCLUDES "${C74_SUPPORT_DIR}/msp-includes")
 	set(MAX_SDK_JIT_INCLUDES "${C74_SUPPORT_DIR}/jit-includes")
+
+	set(C74_INCLUDES "${C74_SUPPORT_DIR}" "${MAX_SDK_INCLUDES}" "${MAX_SDK_MSP_INCLUDES}" "${MAX_SDK_JIT_INCLUDES}")
+	set(C74_SCRIPTS "${MAX_SDK_BASE_DIR}/script")
 endmacro()
 
 
@@ -76,7 +79,7 @@ macro(c74_max_post_project_calls)
 			-DWIN_VERSION
 			-D_USE_MATH_DEFINES
 		)
-	else ()
+	elseif (APPLE)
 		file (STRINGS "${MAX_SDK_BASE_DIR}/script/max-linker-flags.txt" C74_SYM_MAX_LINKER_FLAGS)
 
 		set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} ${C74_SYM_MAX_LINKER_FLAGS}")
