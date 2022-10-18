@@ -7,7 +7,7 @@ project(max-sdk-base)
 
 # we need to access this directory in some places
 set_property(GLOBAL PROPERTY C74_MAX_SDK_BASE_DIR "${CMAKE_CURRENT_SOURCE_DIR}")
-include(script/add_max_target.cmake)
+include(script/c74_add_max_target.cmake)
 
 
 # Create interface lib for max-sdk-base headers

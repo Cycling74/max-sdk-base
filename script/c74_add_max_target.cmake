@@ -8,9 +8,9 @@ include("${CMAKE_CURRENT_LIST_DIR}/git-rev.cmake")
 # The list of sources which is passed will be added to the target. 
 #
 # Call example: 
-# add_max_target(mytarget SOURCES main.cpp asd.cpp)
+# c74_add_max_target(mytarget SOURCES main.cpp asd.cpp)
 # 
-function(add_max_target target)
+function(c74_add_max_target target)
 	set(sources_arg SOURCES)
 	cmake_parse_arguments(PARSE_ARGV 0 PARAMS "${options}" "${oneValueArgs}" "${sources_arg}")
 
@@ -26,6 +26,13 @@ function(add_max_target target)
 	target_link_libraries(${target} PRIVATE max-sdk-base)
 	set_target_properties(${target} PROPERTIES OUTPUT_NAME "${${target}_EXTERN_OUTPUT_NAME}")
 	set_target_properties(${target} PROPERTIES PREFIX "") # remove the 'lib' prefix for some generators
+	
+
+	# Append link flags (are somehow not adopted from CMAKE_MODULE_LINKER_FLAGS)
+	if (APPLE)
+		file (STRINGS "${MAX_SDK_BASE_DIR}/script/max-linker-flags.txt" C74_SYM_MAX_LINKER_FLAGS)
+		set_property(TARGET ${target} APPEND PROPERTY LINK_FLAGS ${C74_SYM_MAX_LINKER_FLAGS})
+    endif ()
 
 
 	# C++ standard and compile flags
