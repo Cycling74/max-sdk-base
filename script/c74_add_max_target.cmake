@@ -73,6 +73,7 @@ function(c74_add_max_target target)
 		set_target_properties(${target} PROPERTIES SUFFIX ".mxe64")
 
 		if (CMAKE_GENERATOR MATCHES "Visual Studio")
+			set_target_properties(${target} PROPERTIES MSVC_RUNTIME_LIBRARY "MultiThreaded$<$<CONFIG:Debug>:Debug>")
 			set_target_properties(${target} PROPERTIES COMPILE_FLAGS "/wd4814")      # warning about constexpr not being const in c++14
 			set_target_properties(${target} PROPERTIES LINK_FLAGS "/INCREMENTAL:NO") # do not generate ILK files
 			set_target_properties(${target} PROPERTIES COMPILE_FLAGS "/MP")          # allow parallel builds
