@@ -157,7 +157,9 @@
 #endif
 
 // debug support
-#if defined (__GNUC__) && defined(C74_X64)
+#ifdef WIN_VERSION
+#define C74DebugBreak DebugBreak()
+#elif defined (__GNUC__) && defined(C74_X64)
 #ifndef C74DebugBreak
 #ifdef __x86_64__
 #define C74DebugBreak asm("int3")
@@ -167,10 +169,6 @@
 #warning implement me
 #endif
 #endif
-#endif
-
-#ifdef WIN_VERSION
-#define C74DebugBreak DebugBreak()
 #endif
 
 #ifndef C74_STR
