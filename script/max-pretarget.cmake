@@ -77,23 +77,46 @@ set(CMAKE_LIBRARY_OUTPUT_DIRECTORY_RELEASE "${CMAKE_LIBRARY_OUTPUT_DIRECTORY}")
 if (WIN32)
 	set(CMAKE_PDB_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/pdb/$<CONFIG>")
 
-	SET(MaxAPI_LIB ${MAX_SDK_INCLUDES}/x64/MaxAPI.lib)
-	SET(MaxAudio_LIB ${MAX_SDK_MSP_INCLUDES}/x64/MaxAudio.lib)
-	SET(Jitter_LIB ${MAX_SDK_JIT_INCLUDES}/x64/jitlib.lib)	
-
-	MARK_AS_ADVANCED (MaxAPI_LIB)
-	MARK_AS_ADVANCED (MaxAudio_LIB)
-	MARK_AS_ADVANCED (Jitter_LIB)
+  SET(MAX_LIBRARY ${MAX_SDK_INCLUDES}/x64/MaxAPI.lib)
+  SET(MSP_LIBRARY ${MAX_SDK_MSP_INCLUDES}/x64/MaxAudio.lib)
+  SET(JITTER_LIBRARY ${MAX_SDK_JIT_INCLUDES}/x64/jitlib.lib)	
 
 	add_definitions(
 		-DMAXAPI_USE_MSCRT
 		-DWIN_VERSION
 		-D_USE_MATH_DEFINES
 	)
-elseif (APPLE)
-	file (STRINGS "${CMAKE_CURRENT_LIST_DIR}/max-linker-flags.txt" C74_SYM_MAX_LINKER_FLAGS)
+else() #NOT WINDOWS
+  if (APPLE)
+    file (STRINGS "${CMAKE_CURRENT_LIST_DIR}/max-linker-flags.txt" C74_SYM_MAX_LINKER_FLAGS)
+    find_library(
+      MSP_LIBRARY "MaxAudioAPI"
+      REQUIRED
+      PATHS "${MAX_SDK_MSP_INCLUDES}"
+      NO_DEFAULT_PATH
+      #only use the specific path above, don't look in system root
+      #this enables cross compilation to provide an alternative root
+      #but also find this specific path
+      NO_CMAKE_FIND_ROOT_PATH
+    )
+    find_library(
+      JITTER_LIBRARY "JitterAPI"
+      REQUIRED
+      PATHS "${MAX_SDK_JIT_INCLUDES}"
+      NO_DEFAULT_PATH
+      NO_CMAKE_FIND_ROOT_PATH
+    )
+  else()
+    set(MSP_LIBRARY "${MAX_SDK_MSP_INCLUDES}/x64/MaxAudioAPI.so")
+    set(JITTER_LIBRARY "${MAX_SDK_JIT_INCLUDES}/x64/JitterAPI.so")
+  endif()
 
 	set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} ${C74_SYM_MAX_LINKER_FLAGS}")
 	set(CMAKE_SHARED_LINKER_FLAGS "${CMAKE_SHARED_LINKER_FLAGS} ${C74_SYM_MAX_LINKER_FLAGS}")
 	set(CMAKE_MODULE_LINKER_FLAGS "${CMAKE_SHARED_LINKER_FLAGS} ${C74_SYM_MAX_LINKER_FLAGS}")
 endif ()
+
+MARK_AS_ADVANCED (MAX_LIBRARY)
+MARK_AS_ADVANCED (MSP_LIBRARY)
+MARK_AS_ADVANCED (JITTER_LIBRARY)
+
