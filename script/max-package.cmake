@@ -52,8 +52,18 @@ if (EXISTS "${CMAKE_CURRENT_SOURCE_DIR}/package-info.json.in")
 		set(EXCLUDE_FROM_COLLECTIVES "no")
 	endif ()
 
-	message("Building _____ ${PACKAGE_VERSION} _____")
+else()
+	message(STATUS, "no package-info.json, setting default values")
+
+	set(ADD_VERINFO NO)
+	set(AUTHOR "unknown")
+	set(AUTHOR_DOMAIN "com.acme")
+	set(COPYRIGHT_STRING "Copyright (c) 1974 Acme Inc")
+	set(PACKAGE_VERSION "0.0.1")
+
 endif ()
+
+message("Building _____ ${PACKAGE_VERSION} _____")
 
 
 # Copy PkgInfo and update Info.plist files on the Mac
