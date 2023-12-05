@@ -97,4 +97,8 @@ if (APPLE AND NOT "${PROJECT_NAME}" MATCHES "_test")
 		VERBATIM
 		COMMENT "Copy PkgInfo" 
 	)
+
+	add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD
+		COMMAND codesign -s - -f --deep $<TARGET_BUNDLE_DIR:${PROJECT_NAME}> 2>/dev/null
+	)
 endif ()
