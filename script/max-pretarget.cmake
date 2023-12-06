@@ -1,6 +1,8 @@
 # Copyright 2018 The Max-API Authors. All rights reserved.
 # Use of this source code is governed by the MIT License found in the License.md file.
 
+option(MAX_SDK_CODESIGN_EXTERNS "Sign macos externs during build" ON) # use MAX_SDK_CODESIGN_IDENTITY to override the default adhoc identity "-"
+
 string(REGEX REPLACE "(.*)/" "" THIS_FOLDER_NAME "${CMAKE_CURRENT_SOURCE_DIR}")
 
 string(REPLACE "~" "_tilde" THIS_FOLDER_NAME "${THIS_FOLDER_NAME}")
