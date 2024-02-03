@@ -124,7 +124,13 @@
 
 // C74_PASS_ARGS passes __VA_ARGS__ as multiple parameters to another macro, working around the following bug:
 // https://connect.microsoft.com/VisualStudio/feedback/details/521844/variadic-macro-treating-va-args-as-a-single-parameter-for-other-macros#details
-#if _MSC_VER >= 1400
+#if _MSC_VER >= 1400 && _MSC_VER < 1937 && __cplusplus < 202003L
+#define C74_MSVC_VAARGS_WORKAROUND 1
+#else
+#define C74_MSVC_VAARGS_WORKAROUND 0
+#endif
+
+#if C74_MSVC_VAARGS_WORKAROUND
 #	define C74_PASS_ARGS_LEFT (
 #	define C74_PASS_ARGS_RIGHT )
 #	define C74_PASS_ARGS(...)							C74_PASS_ARGS_LEFT __VA_ARGS__ C74_PASS_ARGS_RIGHT
@@ -179,7 +185,7 @@
 //    this is done to sign-extend and promote shorter integer types
 //  - see object_method for an example
 
-#if _MSC_VER >= 1400
+#if C74_MSVC_VAARGS_WORKAROUND
 #define C74_VARFUN(VARFUN_IMPL, ...) C74_JOIN_2(C74_VARFUN_, C74_NUM_ARGS(__VA_ARGS__)) C74_PASS_ARGS(VARFUN_IMPL, __VA_ARGS__)
 #else
 #define C74_VARFUN(VARFUN_IMPL, ...) C74_JOIN_2(C74_VARFUN_, C74_NUM_ARGS(__VA_ARGS__))( VARFUN_IMPL, __VA_ARGS__ )
