@@ -22,6 +22,7 @@ namespace max {
 #include "max-includes/jgraphics.h"
 #include "max-includes/ext_parameter.h"
 #include "max-includes/ext_boxstyle.h"
+#include "max-includes/ext_proto.h"
 
 #undef min
 #undef max
