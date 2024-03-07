@@ -15,6 +15,15 @@ namespace max {
 
 #define calcoffset(x,y) ((c74::max::t_ptr_int)(&(((x *)0L)->y)))
 
+#ifdef C74_NO_SDK_BASE_SUBMODULE
+#include "ext.h"
+#include "ext_dictobj.h"
+#include "ext_time.h"
+#include "commonsyms.h"
+#include "jgraphics.h"
+#include "ext_parameter.h"
+#include "ext_boxstyle.h"
+#else
 #include "max-includes/ext.h"
 #include "max-includes/ext_dictobj.h"
 #include "max-includes/ext_time.h"
@@ -22,6 +31,7 @@ namespace max {
 #include "max-includes/jgraphics.h"
 #include "max-includes/ext_parameter.h"
 #include "max-includes/ext_boxstyle.h"
+#endif
 
 #undef min
 #undef max
