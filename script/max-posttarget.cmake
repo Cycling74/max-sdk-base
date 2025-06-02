@@ -84,6 +84,8 @@ elseif (WIN32)
 	if (ADD_VERINFO)
 		target_sources(${PROJECT_NAME} PRIVATE ${CMAKE_CURRENT_LIST_DIR}/verinfo.rc)
 	endif()
+else() 
+	set_target_properties(${PROJECT_NAME} PROPERTIES SUFFIX ".mxl_${CMAKE_SYSTEM_PROCESSOR}")
 endif ()
 
 
