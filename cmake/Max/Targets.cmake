@@ -12,7 +12,7 @@ set(_c74 "${MAXSDK_BASE_DIR}/c74support")
 
 # Max::Max
 add_library(Max::Max INTERFACE IMPORTED GLOBAL)
-target_include_directories(Max::Max INTERFACE "${_c74}/max-includes")
+target_include_directories(Max::Max INTERFACE "${_c74}" "${_c74}/max-includes")
 if(WIN32)
     target_link_libraries(Max::Max INTERFACE "${_c74}/max-includes/x64/MaxAPI.lib")
     target_compile_definitions(Max::Max INTERFACE MAXAPI_USE_MSCRT WIN_VERSION _USE_MATH_DEFINES)
