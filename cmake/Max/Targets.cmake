@@ -1,5 +1,13 @@
 include_guard(GLOBAL)
 
+# Derive the SDK root from this file's location (cmake/Max/ -> ../../) so that
+# Targets.cmake works whether included directly or via add_subdirectory/FetchContent.
+get_filename_component(_maxsdk_base "${CMAKE_CURRENT_LIST_DIR}/../.." ABSOLUTE)
+if(NOT DEFINED MAXSDK_BASE_DIR)
+    set(MAXSDK_BASE_DIR "${_maxsdk_base}" CACHE PATH "Root of max-sdk-base")
+endif()
+unset(_maxsdk_base)
+
 set(_c74 "${MAXSDK_BASE_DIR}/c74support")
 
 # Max::Max
