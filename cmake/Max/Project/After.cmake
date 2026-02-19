@@ -10,9 +10,15 @@ set(_tgt "${PROJECT_NAME}")
 # Reverse _tilde convention so the output file/bundle carries the real ~ name
 string(REPLACE "_tilde" "~" _output_name "${_tgt}")
 
-# Glob sources with CONFIGURE_DEPENDS so cmake re-runs when files are added/removed
-file(GLOB ${_tgt}_SOURCES CONFIGURE_DEPENDS "${CMAKE_CURRENT_SOURCE_DIR}/*.h" "${CMAKE_CURRENT_SOURCE_DIR}/*.c"
-     "${CMAKE_CURRENT_SOURCE_DIR}/*.cpp")
+# If the directory sets max::sources, use that list; otherwise glob everything.
+get_property(_explicit_sources DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}" PROPERTY max::sources)
+if(_explicit_sources)
+    set(${_tgt}_SOURCES ${_explicit_sources})
+else()
+    file(GLOB ${_tgt}_SOURCES CONFIGURE_DEPENDS "${CMAKE_CURRENT_SOURCE_DIR}/*.h"
+         "${CMAKE_CURRENT_SOURCE_DIR}/*.c" "${CMAKE_CURRENT_SOURCE_DIR}/*.cpp")
+endif()
+unset(_explicit_sources)
 
 add_library(${_tgt} MODULE)
 
