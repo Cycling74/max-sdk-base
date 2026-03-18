@@ -3,6 +3,10 @@ if(NOT DEFINED C74_CXX_STANDARD)
     set(C74_CXX_STANDARD 0)
 endif()
 
+option(MAX_SDK_CODESIGN_EXTERNS "Sign macOS externs during build" ON)
+# Use MAX_SDK_CODESIGN_IDENTITY to override the default ad-hoc identity "-"
+# e.g. -DMAX_SDK_CODESIGN_IDENTITY="Developer ID Application: ..."
+
 if(WIN32 AND CMAKE_GENERATOR MATCHES "Visual Studio")
     set(CMAKE_C_FLAGS_DEBUG "/D_DEBUG /MTd /Zi /Ob0 /Od /RTC1")
     set(CMAKE_C_FLAGS_MINSIZEREL "/MT /O1 /Ob1 /D NDEBUG")

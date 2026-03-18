@@ -84,6 +84,27 @@ if(APPLE)
         COMMAND "${CMAKE_COMMAND}" -E copy_if_different "${_scripts}/PkgInfo"
                 "${CMAKE_LIBRARY_OUTPUT_DIRECTORY}/${_output_name}.mxo/Contents/PkgInfo")
     unset(_scripts)
+    if(MAX_SDK_CODESIGN_EXTERNS)
+        if(NOT DEFINED MAX_SDK_CODESIGN_IDENTITY)
+            set(MAX_SDK_CODESIGN_IDENTITY "-")
+            message(STATUS "Code signing with ad-hoc identity")
+        else()
+            execute_process(COMMAND security find-identity -p codesigning -v
+                            OUTPUT_VARIABLE _security_output)
+            if(_security_output MATCHES "${MAX_SDK_CODESIGN_IDENTITY}")
+                message(STATUS "Code signing identity found, will sign")
+            else()
+                set(MAX_SDK_CODESIGN_IDENTITY "-")
+                message(STATUS "Code signing with ad-hoc identity")
+            endif()
+            unset(_security_output)
+        endif()
+        add_custom_command(
+            TARGET ${_tgt}
+            POST_BUILD
+            COMMAND codesign -s "${MAX_SDK_CODESIGN_IDENTITY}" -f --deep
+                    "$<TARGET_BUNDLE_DIR:${_tgt}>" 2>/dev/null)
+    endif()
 elseif(WIN32)
     set_target_properties(${_tgt} PROPERTIES SUFFIX ".mxe64")
     if(CMAKE_GENERATOR MATCHES "Visual Studio")
