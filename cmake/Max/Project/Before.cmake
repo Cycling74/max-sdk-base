@@ -1,4 +1,8 @@
 # Windows /MT runtime — set before compiler tests run inside project()
+if(NOT DEFINED C74_CXX_STANDARD)
+    set(C74_CXX_STANDARD 0)
+endif()
+
 if(WIN32 AND CMAKE_GENERATOR MATCHES "Visual Studio")
     set(CMAKE_C_FLAGS_DEBUG "/D_DEBUG /MTd /Zi /Ob0 /Od /RTC1")
     set(CMAKE_C_FLAGS_MINSIZEREL "/MT /O1 /Ob1 /D NDEBUG")

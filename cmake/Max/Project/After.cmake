@@ -57,7 +57,14 @@ if(APPLE)
     target_link_options(${_tgt} PRIVATE ${_flags_list})
 endif()
 
-set_target_properties(${_tgt} PROPERTIES CXX_STANDARD 17 CXX_STANDARD_REQUIRED ON)
+if(C74_CXX_STANDARD EQUAL 98)
+    if(APPLE)
+        target_compile_options(${_tgt} PRIVATE -std=gnu++98 -stdlib=libstdc++)
+        target_link_options(${_tgt} PRIVATE -stdlib=libstdc++)
+    endif()
+else()
+    set_target_properties(${_tgt} PROPERTIES CXX_STANDARD 17 CXX_STANDARD_REQUIRED ON)
+endif()
 
 set_target_properties(${_tgt} PROPERTIES OUTPUT_NAME "${_output_name}" PREFIX "")
 
