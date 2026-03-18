@@ -69,6 +69,19 @@ endif()
 set_target_properties(${_tgt} PROPERTIES OUTPUT_NAME "${_output_name}" PREFIX "")
 
 if(APPLE)
+    if(NOT DEFINED GIT_VERSION_TAG)
+        include("${MAXSDK_BASE_DIR}/script/git-rev.cmake" OPTIONAL)
+        if(NOT DEFINED GIT_VERSION_TAG)
+            set(GIT_VERSION_TAG "0.0.0")
+        endif()
+    endif()
+    if(NOT DEFINED BUNDLE_IDENTIFIER)
+        set(BUNDLE_IDENTIFIER "\${PRODUCT_NAME:rfc1034identifier}")
+    endif()
+    if(NOT DEFINED AUTHOR_DOMAIN)
+        set(AUTHOR_DOMAIN "com.acme")
+    endif()
+
     set(_scripts "${MAXSDK_BASE_DIR}/script")
     set_target_properties(
         ${_tgt}
