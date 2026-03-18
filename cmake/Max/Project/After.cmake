@@ -84,9 +84,7 @@ if(APPLE)
         COMMAND "${CMAKE_COMMAND}" -E copy_if_different "${_scripts}/PkgInfo"
                 "${CMAKE_LIBRARY_OUTPUT_DIRECTORY}/${_output_name}.mxo/Contents/PkgInfo")
     unset(_scripts)
-endif()
-
-if(WIN32)
+elseif(WIN32)
     set_target_properties(${_tgt} PROPERTIES SUFFIX ".mxe64")
     if(CMAKE_GENERATOR MATCHES "Visual Studio")
         # Fix: posttarget.cmake sets COMPILE_FLAGS /wd4814 then clobbers it with /MP
@@ -97,6 +95,8 @@ if(WIN32)
     if(ADD_VERINFO)
         target_sources(${_tgt} PRIVATE "${MAXSDK_BASE_DIR}/script/verinfo.rc")
     endif()
+else()
+    set_target_properties(${_tgt} PROPERTIES SUFFIX ".mxl_${CMAKE_SYSTEM_PROCESSOR}")
 endif()
 
 unset(_output_name)
