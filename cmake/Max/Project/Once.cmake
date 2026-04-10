@@ -1,6 +1,5 @@
 include_guard(GLOBAL)
 
-# Windows /MT runtime — set before compiler tests run inside project()
 if(NOT DEFINED C74_CXX_STANDARD)
     set(C74_CXX_STANDARD 0)
 endif()
@@ -9,16 +8,8 @@ option(MAX_SDK_CODESIGN_EXTERNS "Sign macOS externs during build" ON)
 # Use MAX_SDK_CODESIGN_IDENTITY to override the default ad-hoc identity "-"
 # e.g. -DMAX_SDK_CODESIGN_IDENTITY="Developer ID Application: ..."
 
-if(WIN32 AND CMAKE_GENERATOR MATCHES "Visual Studio")
-    set(CMAKE_C_FLAGS_DEBUG "/D_DEBUG /MTd /Zi /Ob0 /Od /RTC1")
-    set(CMAKE_C_FLAGS_MINSIZEREL "/MT /O1 /Ob1 /D NDEBUG")
-    set(CMAKE_C_FLAGS_RELEASE "/MT /O2 /Ob2 /D NDEBUG")
-    set(CMAKE_C_FLAGS_RELWITHDEBINFO "/MT /Zi /O2 /Ob1 /D NDEBUG")
-    set(CMAKE_CXX_FLAGS_DEBUG "/D_DEBUG /MTd /Zi /Ob0 /Od /RTC1")
-    set(CMAKE_CXX_FLAGS_MINSIZEREL "/MT /O1 /Ob1 /D NDEBUG")
-    set(CMAKE_CXX_FLAGS_RELEASE "/MT /O2 /Ob2 /D NDEBUG")
-    set(CMAKE_CXX_FLAGS_RELWITHDEBINFO "/MT /Zi /O2 /Ob1 /D NDEBUG")
-endif()
+set(CMAKE_MSVC_DEBUG_INFORMATION_FORMAT "$<$<CONFIG:Debug,RelWithDebInfo>:ProgramDatabase>")
+set(CMAKE_MSVC_RUNTIME_LIBRARY "MultiThreaded$<$<CONFIG:Debug>:Debug>")
 
 if(APPLE AND NOT DEFINED CACHE{CMAKE_OSX_DEPLOYMENT_TARGET})
     set(CMAKE_OSX_DEPLOYMENT_TARGET "10.11" CACHE STRING "Minimum macOS deployment version")
