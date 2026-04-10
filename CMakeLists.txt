@@ -7,6 +7,10 @@ find_package(Git QUIET)
 include(C74/PackageInfo)
 include(C74/Support)
 
+list(PREPEND CMAKE_PROJECT_TOP_LEVEL_INCLUDES Max/Project/Once.cmake)
+list(PREPEND CMAKE_PROJECT_INCLUDE_BEFORE Max/Project/Before.cmake)
+list(PREPEND CMAKE_PROJECT_INCLUDE Max/Project/After.cmake)
+
 # Set as a CACHE variable so it remains visible after add_subdirectory returns;
 # After.cmake and Before.cmake read it when they fire during the consumer's project() call.
 set(MAXSDK_BASE_DIR
