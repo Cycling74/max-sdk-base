@@ -11,6 +11,10 @@ list(PREPEND CMAKE_PROJECT_TOP_LEVEL_INCLUDES Max/Project/Once.cmake)
 list(PREPEND CMAKE_PROJECT_INCLUDE_BEFORE Max/Project/Before.cmake)
 list(PREPEND CMAKE_PROJECT_INCLUDE Max/Project/After.cmake)
 
+if(NOT DEFINED CACHE{CMAKE_OSX_DEPLOYMENT_TARGET})
+  set(CMAKE_OSX_DEPLOYMENT_TARGET "10.11" CACHE STRING "Minimum macOS deployment version")
+endif()
+
 # Set as a CACHE variable so it remains visible after add_subdirectory returns;
 # After.cmake and Before.cmake read it when they fire during the consumer's project() call.
 set(MAXSDK_BASE_DIR
