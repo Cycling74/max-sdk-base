@@ -10,6 +10,9 @@ option(MAX_SDK_CODESIGN_EXTERNS "Sign macOS externs during build" ON)
 
 set(CMAKE_MSVC_DEBUG_INFORMATION_FORMAT "$<$<CONFIG:Debug,RelWithDebInfo>:ProgramDatabase>")
 set(CMAKE_MSVC_RUNTIME_LIBRARY "MultiThreaded$<$<CONFIG:Debug>:Debug>")
+
+# CMake 4.0 Adds CMAKE_MSVC_RUNTIME_CHECKS, like:
+# set(CMAKE_MSVC_RUNTIME_CHECKS "$<$<CONFIG:Debug,RelWithDebInfo>:StackFrameErrorCheck;UninitializedVariable>")
 add_compile_options($<$<AND:$<CONFIG:Debug>,$<CXX_COMPILER_ID:MSVC>>:/RTC1>)
 
 set(CMAKE_SHARED_MODULE_SUFFIX ".mxl_${CMAKE_SYSTEM_PROCESSOR}")
