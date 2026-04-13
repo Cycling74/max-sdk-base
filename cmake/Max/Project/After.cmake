@@ -30,7 +30,7 @@ target_sources(
 )
 
 # Auto-set MAX_PACKAGE_JIT_GL and link OpenGL for jit.gl.* externals
-if("${_tgt}" MATCHES "^jit\\.gl\\.")
+if(_tgt MATCHES "^jit\\.gl\\.")
     set_property(TARGET ${_tgt} PROPERTY MAX_PACKAGE_JIT_GL YES)
     if(APPLE)
         target_link_libraries(${_tgt} PRIVATE "-framework OpenGL")
