@@ -11,12 +11,17 @@ list(PREPEND CMAKE_PROJECT_TOP_LEVEL_INCLUDES Max/Project/Once.cmake)
 list(PREPEND CMAKE_PROJECT_INCLUDE_BEFORE Max/Project/Before.cmake)
 list(PREPEND CMAKE_PROJECT_INCLUDE Max/Project/After.cmake)
 
+set(CACHE{MAXSDK_SOURCE_DIR} TYPE INTERNAL VALUE "${CMAKE_CURRENT_SOURCE_DIR}")
+
 if(NOT DEFINED CACHE{CMAKE_OSX_DEPLOYMENT_TARGET})
   set(CMAKE_OSX_DEPLOYMENT_TARGET "10.11" CACHE STRING
     "Minimum macOS deployment version")
 endif()
 
-set(CACHE{MAXSDK_SOURCE_DIR} TYPE INTERNAL VALUE "${CMAKE_CURRENT_SOURCE_DIR}")
+# Better IDE Organization for internal targets
+set_property(GLOBAL PROPERTY PREDEFINED_TARGETS_FOLDER "CMake")
+# Removes CDash Targets when CTest is enabled
+set_property(GLOBAL PROPERTY CTEST_TARGETS_ADDED YES)
 
 # Removes the need for GetGitRevisionDescription.cmake
 set_property(DIRECTORY "${CMAKE_SOURCE_DIR}" APPEND
