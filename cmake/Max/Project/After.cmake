@@ -82,7 +82,7 @@ if(APPLE)
         set(AUTHOR_DOMAIN "com.acme")
     endif()
 
-    set(_scripts "${MAXSDK_BASE_DIR}/script")
+    set(_scripts "${MAXSDK_SOURCE_DIR}/script")
     set_target_properties(
         ${_tgt}
         PROPERTIES BUNDLE TRUE
@@ -126,7 +126,7 @@ elseif(WIN32)
     endif()
     # ADD_VERINFO global set by max-package.cmake (legacy compat)
     if(ADD_VERINFO)
-        target_sources(${_tgt} PRIVATE "${MAXSDK_BASE_DIR}/script/verinfo.rc")
+        target_sources(${_tgt} PRIVATE "${MAXSDK_SOURCE_DIR}/script/verinfo.rc")
     endif()
 endif()
 
