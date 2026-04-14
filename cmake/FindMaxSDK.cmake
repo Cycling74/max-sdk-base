@@ -16,6 +16,25 @@ find_library(MaxSDK_Jitter_LIBRARY
   PATH_SUFFIXES x64
   NO_DEFAULT_PATH)
 
+set(MaxSDK_Max_INCLUDE_DIR "${MAXSDK_SOURCE_DIR}/c74support/max-includes" CACHE PATH "")
+set(MaxSDK_MSP_INCLUDE_DIR "${MAXSDK_SOURCE_DIR}/c74support/msp-includes" CACHE PATH "")
+set(MaxSDK_Jitter_INCLUDE_DIR "${MAXSDK_SOURCE_DIR}/c74support/jit-includes" CACHE PATH "")
+
+if (MaxSDK_Max_LIBRARY AND MaxSDK_Max_INCLUDE_DIR)
+  set(MaxSDK_Max_FOUND TRUE)
+  set(MaxSDK_Max_INCLUDE_DIRS "${MaxSDK_Max_INCLUDE_DIR}")
+endif()
+
+if (MaxSDK_MSP_LIBRARY AND MaxSDK_MSP_INCLUDE_DIR)
+  set(MaxSDK_MSP_FOUND TRUE)
+  set(MaxSDK_MSP_INCLUDE_DIRS "${MaxSDK_MSP_INCLUDE_DIR}")
+endif()
+
+if (MaxSDK_Jitter_LIBRARY AND MaxSDK_Jitter_INCLUDE_DIR)
+  set(MaxSDK_Jitter_FOUND TRUE)
+  set(MaxSDK_Jitter_INCLUDE_DIRS "${MaxSDK_Jitter_INCLUDE_DIR}")
+endif()
+
 find_package_handle_standard_args(MaxSDK
   REQUIRED_VARS
     MaxSDK_Max_LIBRARY
