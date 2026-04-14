@@ -26,7 +26,7 @@ target_sources(
     ${_tgt}
     PRIVATE
         ${${_tgt}_SOURCES}
-        $<$<AND:$<BOOL:$<TARGET_PROPERTY:MAX_PACKAGE_VERSION_INFO>>,$<PLATFORM_ID:Windows>>:${MAXSDK_BASE_DIR}/script/verinfo.rc>
+        $<$<AND:$<BOOL:$<TARGET_PROPERTY:MAX_PACKAGE_VERSION_INFO>>,$<PLATFORM_ID:Windows>>:${MAXSDK_SOURCE_DIR}/script/verinfo.rc>
 )
 
 # Auto-set MAX_PACKAGE_JIT_GL and link OpenGL for jit.gl.* externals
@@ -74,7 +74,6 @@ if(APPLE)
         cmake_language(CALL c74::git::describe _raw_tag)
         cmake_language(CALL c74::git::version::parse "${_raw_tag}" _v)
         set(GIT_VERSION_TAG "${_v_MAJ}.${_v_MIN}.${_v_SUB}")
-        unset(_raw_tag _v_MAJ _v_MIN _v_SUB _v_MOD)
     endif()
     if(NOT DEFINED BUNDLE_IDENTIFIER)
         set(BUNDLE_IDENTIFIER [[${PRODUCT_NAME:rfc1034identifier}]])
