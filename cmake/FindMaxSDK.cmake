@@ -1,12 +1,20 @@
 include(FindPackageHandleStandardArgs)
 
-block(SCOPE_FOR VARIABLES)
-  set(CMAKE_FIND_ROOT_PATH_MODE_LIBRARY ONLY_CMAKE_FIND_ROOT_PATH)
-  set(CMAKE_FIND_ROOT_PATH "${MAXSDK_SOURCE_DIR}/c74support")
-  find_library(MaxSDK_Max_LIBRARY NAMES MaxAPI PATH_SUFFIXES x64)
-  find_library(MaxSDK_MSP_LIBRARY NAMES MaxAudioAPI PATH_SUFFIXES x64)
-  find_library(MaxSDK_Jitter_LIBRARY NAMES JitterAPI PATH_SUFFIXES x64)
-endblock()
+find_library(MaxSDK_Max_LIBRARY
+  NAMES MaxAPI
+  PATHS "${MAXSDK_SOURCE_DIR}/c74support/max-includes"
+  PATH_SUFFIXES x64
+  NO_DEFAULT_PATH)
+find_library(MaxSDK_MSP_LIBRARY
+  NAMES MaxAudioAPI
+  PATHS "${MAXSDK_SOURCE_DIR}/c74support/msp-includes"
+  PATH_SUFFIXES x64
+  NO_DEFAULT_PATH)
+find_library(MaxSDK_Jitter_LIBRARY
+  NAMES JitterAPI
+  PATHS "${MAXSDK_SOURCE_DIR}/c74support/jit-includes"
+  PATH_SUFFIXES x64
+  NO_DEFAULT_PATH)
 
 find_package_handle_standard_args(MaxSDK
   REQUIRED_VARS
