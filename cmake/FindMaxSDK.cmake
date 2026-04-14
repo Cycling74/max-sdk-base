@@ -48,7 +48,7 @@ if (MaxSDK_Max_FOUND AND NOT TARGET Max::Max)
   add_library(Max::Max UNKNOWN IMPORTED GLOBAL)
   target_include_directories(Max::Max
     INTERFACE
-    $<BUILD_INTERFACE:${MaxSDK_Max_INCLUDE_DIRS}>)
+      "${MaxSDK_Max_INCLUDE_DIRS}")
   if (WIN32)
     set_property(TARGET Max::Max PROPERTY IMPORTED_IMPLIB "${MaxSDK_Max_LIBRARY}")
   else()
@@ -65,7 +65,7 @@ if (MaxSDK_MSP_FOUND AND NOT TARGET Max::MSP)
   add_library(Max::MSP UNKNOWN IMPORTED GLOBAL)
   target_include_directories(Max::MSP
     INTERFACE
-      $<BUILD_INTERFACE:${MaxSDK_MSP_INCLUDE_DIRS}>)
+      "${MaxSDK_MSP_INCLUDE_DIRS}")
   if (WIN32)
     set_property(TARGET Max::MSP PROPERTY IMPORTED_IMPLIB "${MaxSDK_MSP_LIBRARY}")
   else()
@@ -77,7 +77,7 @@ if (MaxSDK_Jitter_FOUND AND NOT TARGET Max::Jitter)
   add_library(Max::Jitter UNKNOWN IMPORTED GLOBAL)
   target_include_directories(Max::Jitter
     INTERFACE
-      $<BUILD_INTERFACE:${MaxSDK_Jitter_INCLUDE_DIRS}>)
+      "${MaxSDK_Jitter_INCLUDE_DIRS}")
   if (WIN32)
     set_property(TARGET Max::Jitter PROPERTY IMPORTED_IMPLIB "${MaxSDK_Jitter_LIBRARY}")
   else()
