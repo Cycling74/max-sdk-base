@@ -54,6 +54,11 @@ if (MaxSDK_Max_FOUND AND NOT TARGET Max::Max)
   else()
     set_property(TARGET Max::Max PROPERTY IMPORTED_LOCATION "${MaxSDK_Max_LIBRARY}")
   endif()
+  if (APPLE)
+    set_property(TARGET Max::Max PROPERTY
+      _MAX_LINKER_FLAGS_FILE
+      "${MAXSDK_SOURCE_DIR}/c74support/max-includes/c74_linker_flags.txt")
+  endif()
 endif()
 
 if (MaxSDK_MSP_FOUND AND NOT TARGET Max::MSP)
