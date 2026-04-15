@@ -83,19 +83,35 @@ if(APPLE)
     endif()
 
     set(_scripts "${MAXSDK_SOURCE_DIR}/script")
+
+    set(MACOSX_BUNDLE_EXECUTABLE_NAME "${_output_name}")
+    set(PACKAGE_VERSION "${GIT_VERSION_TAG}")
+    if(NOT DEFINED EXCLUDE_FROM_COLLECTIVES)
+        set(EXCLUDE_FROM_COLLECTIVES "")
+    endif()
+    if(NOT DEFINED COPYRIGHT_STRING)
+        set(COPYRIGHT_STRING "")
+    endif()
+    configure_file(
+        "${_scripts}/Info.plist.in"
+        "${CMAKE_CURRENT_BINARY_DIR}/${_tgt}_Info.plist")
+
     set_target_properties(
         ${_tgt}
         PROPERTIES BUNDLE TRUE
                    BUNDLE_EXTENSION "mxo"
                    XCODE_ATTRIBUTE_WRAPPER_EXTENSION "mxo"
                    MACOSX_BUNDLE_BUNDLE_VERSION "${GIT_VERSION_TAG}"
-                   MACOSX_BUNDLE_INFO_PLIST "${_scripts}/Info.plist.in"
+                   MACOSX_BUNDLE_INFO_PLIST "${CMAKE_CURRENT_BINARY_DIR}/${_tgt}_Info.plist"
                    XCODE_ATTRIBUTE_PRODUCT_BUNDLE_IDENTIFIER "${AUTHOR_DOMAIN}.${BUNDLE_IDENTIFIER}")
     add_custom_command(
         TARGET ${_tgt}
         POST_BUILD
         COMMAND "${CMAKE_COMMAND}" -E copy_if_different "${_scripts}/PkgInfo"
-                "${CMAKE_LIBRARY_OUTPUT_DIRECTORY}/${_output_name}.mxo/Contents/PkgInfo")
+                "${CMAKE_LIBRARY_OUTPUT_DIRECTORY}/${_output_name}.mxo/Contents/PkgInfo"
+        COMMAND "${CMAKE_COMMAND}" -E copy_if_different
+                "${CMAKE_CURRENT_BINARY_DIR}/${_tgt}_Info.plist"
+                "${CMAKE_LIBRARY_OUTPUT_DIRECTORY}/${_output_name}.mxo/Contents/Info.plist")
     unset(_scripts)
     if(MAX_SDK_CODESIGN_EXTERNS)
         if(NOT DEFINED MAX_SDK_CODESIGN_IDENTITY)
