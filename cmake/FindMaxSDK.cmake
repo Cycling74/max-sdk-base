@@ -42,22 +42,26 @@ find_package_handle_standard_args(MaxSDK
   HANDLE_COMPONENTS)
 
 if (MaxSDK_Max_FOUND AND NOT TARGET Max::Max)
-  # UNKNOWN allows us to return a framework bundle or an import .lib
   # GLOBAL to make the target visible to all callers regardless of where
   # the module is included (imported targets are directory-scoped by default)
-  add_library(Max::Max UNKNOWN IMPORTED GLOBAL)
-  target_include_directories(Max::Max
-    INTERFACE
-      "${MaxSDK_Max_INCLUDE_DIRS}")
-  if (WIN32)
-    set_property(TARGET Max::Max PROPERTY IMPORTED_IMPLIB "${MaxSDK_Max_LIBRARY}")
-  else()
-    set_property(TARGET Max::Max PROPERTY IMPORTED_LOCATION "${MaxSDK_Max_LIBRARY}")
-  endif()
   if (APPLE)
+    # On macOS, Max API symbols are resolved at load time by the Max host
+    # via the weak-undefined (-Wl,-U) linker flags. Linking directly against
+    # MaxAPI.framework would introduce an unsatisfiable runtime dependency on
+    # MaxAPIImpl.framework, so Max::Max is INTERFACE-only on macOS.
+    add_library(Max::Max INTERFACE IMPORTED GLOBAL)
+    target_include_directories(Max::Max
+      INTERFACE
+        "${MaxSDK_Max_INCLUDE_DIRS}")
     set_property(TARGET Max::Max PROPERTY
       _MAX_LINKER_FLAGS_FILE
       "${MAXSDK_SOURCE_DIR}/c74support/max-includes/c74_linker_flags.txt")
+  else()
+    add_library(Max::Max UNKNOWN IMPORTED GLOBAL)
+    target_include_directories(Max::Max
+      INTERFACE
+        "${MaxSDK_Max_INCLUDE_DIRS}")
+    set_property(TARGET Max::Max PROPERTY IMPORTED_IMPLIB "${MaxSDK_Max_LIBRARY}")
   endif()
 endif()
 
