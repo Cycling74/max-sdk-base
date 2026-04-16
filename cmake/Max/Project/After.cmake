@@ -75,9 +75,6 @@ if(APPLE)
         cmake_language(CALL c74::git::version::parse "${_raw_tag}" _v)
         set(GIT_VERSION_TAG "${_v_MAJ}.${_v_MIN}.${_v_SUB}")
     endif()
-    if(NOT DEFINED BUNDLE_IDENTIFIER)
-        set(BUNDLE_IDENTIFIER [[${PRODUCT_NAME:rfc1034identifier}]])
-    endif()
     if(NOT DEFINED AUTHOR_DOMAIN)
         set(AUTHOR_DOMAIN "com.acme")
     endif()
@@ -92,26 +89,53 @@ if(APPLE)
     if(NOT DEFINED COPYRIGHT_STRING)
         set(COPYRIGHT_STRING "")
     endif()
-    configure_file(
-        "${_scripts}/Info.plist.in"
-        "${CMAKE_CURRENT_BINARY_DIR}/${_tgt}_Info.plist")
 
-    set_target_properties(
-        ${_tgt}
-        PROPERTIES BUNDLE TRUE
-                   BUNDLE_EXTENSION "mxo"
-                   XCODE_ATTRIBUTE_WRAPPER_EXTENSION "mxo"
-                   MACOSX_BUNDLE_BUNDLE_VERSION "${GIT_VERSION_TAG}"
-                   MACOSX_BUNDLE_INFO_PLIST "${CMAKE_CURRENT_BINARY_DIR}/${_tgt}_Info.plist"
-                   XCODE_ATTRIBUTE_PRODUCT_BUNDLE_IDENTIFIER "${AUTHOR_DOMAIN}.${BUNDLE_IDENTIFIER}")
+    if(CMAKE_GENERATOR STREQUAL "Xcode")
+        # Xcode expands ${PRODUCT_NAME:rfc1034identifier} at build time.
+        # configure_file @ONLY expands @VAR@ placeholders and leaves ${...} alone for Xcode.
+        # XCODE_ATTRIBUTE_INFOPLIST_FILE bypasses CMake's own configure_file processing of the plist.
+        if(NOT DEFINED BUNDLE_IDENTIFIER)
+            set(BUNDLE_IDENTIFIER [[${PRODUCT_NAME:rfc1034identifier}]])
+        endif()
+        configure_file(
+            "${MAXSDK_SOURCE_DIR}/cmake/Info.plist.in"
+            "${CMAKE_CURRENT_BINARY_DIR}/${_tgt}_Info.plist"
+            @ONLY)
+        set_target_properties(
+            ${_tgt}
+            PROPERTIES BUNDLE TRUE
+                       BUNDLE_EXTENSION "mxo"
+                       XCODE_ATTRIBUTE_WRAPPER_EXTENSION "mxo"
+                       MACOSX_BUNDLE_BUNDLE_VERSION "${GIT_VERSION_TAG}"
+                       XCODE_ATTRIBUTE_INFOPLIST_FILE "${CMAKE_CURRENT_BINARY_DIR}/${_tgt}_Info.plist"
+                       XCODE_ATTRIBUTE_PRODUCT_BUNDLE_IDENTIFIER "${AUTHOR_DOMAIN}.${BUNDLE_IDENTIFIER}")
+    else()
+        # Non-Xcode generators: resolve everything at configure time; post-build copy handles the plist.
+        if(NOT DEFINED BUNDLE_IDENTIFIER)
+            set(BUNDLE_IDENTIFIER "${_output_name}")
+        endif()
+        configure_file(
+            "${MAXSDK_SOURCE_DIR}/cmake/Info.plist.in"
+            "${CMAKE_CURRENT_BINARY_DIR}/${_tgt}_Info.plist"
+            @ONLY)
+        set_target_properties(
+            ${_tgt}
+            PROPERTIES BUNDLE TRUE
+                       BUNDLE_EXTENSION "mxo"
+                       MACOSX_BUNDLE_BUNDLE_VERSION "${GIT_VERSION_TAG}")
+        add_custom_command(
+            TARGET ${_tgt}
+            POST_BUILD
+            COMMAND "${CMAKE_COMMAND}" -E copy_if_different
+                    "${CMAKE_CURRENT_BINARY_DIR}/${_tgt}_Info.plist"
+                    "${CMAKE_LIBRARY_OUTPUT_DIRECTORY}/${_output_name}.mxo/Contents/Info.plist")
+    endif()
+
     add_custom_command(
         TARGET ${_tgt}
         POST_BUILD
         COMMAND "${CMAKE_COMMAND}" -E copy_if_different "${_scripts}/PkgInfo"
-                "${CMAKE_LIBRARY_OUTPUT_DIRECTORY}/${_output_name}.mxo/Contents/PkgInfo"
-        COMMAND "${CMAKE_COMMAND}" -E copy_if_different
-                "${CMAKE_CURRENT_BINARY_DIR}/${_tgt}_Info.plist"
-                "${CMAKE_LIBRARY_OUTPUT_DIRECTORY}/${_output_name}.mxo/Contents/Info.plist")
+                "${CMAKE_LIBRARY_OUTPUT_DIRECTORY}/${_output_name}.mxo/Contents/PkgInfo")
     unset(_scripts)
     if(MAX_SDK_CODESIGN_EXTERNS)
         if(NOT DEFINED MAX_SDK_CODESIGN_IDENTITY)
