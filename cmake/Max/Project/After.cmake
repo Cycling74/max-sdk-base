@@ -10,24 +10,19 @@ set(_tgt "${PROJECT_NAME}")
 # Reverse _tilde convention so the output file/bundle carries the real ~ name
 string(REPLACE "_tilde" "~" _output_name "${_tgt}")
 
-# If the directory sets max::sources, use that list; otherwise glob everything.
-get_property(_explicit_sources DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}" PROPERTY max::sources)
-if(_explicit_sources)
-    set(${_tgt}_SOURCES ${_explicit_sources})
-else()
-    file(GLOB ${_tgt}_SOURCES CONFIGURE_DEPENDS "${CMAKE_CURRENT_SOURCE_DIR}/*.h"
-         "${CMAKE_CURRENT_SOURCE_DIR}/*.c" "${CMAKE_CURRENT_SOURCE_DIR}/*.cpp")
-endif()
-unset(_explicit_sources)
+# max::glob defaults to OFF. Enable with set_property(DIRECTORY PROPERTY max::glob ON) before project().
+get_property(_glob_enabled DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}" PROPERTY max::glob)
 
 add_library(${_tgt} MODULE)
 
-target_sources(
-    ${_tgt}
-    PRIVATE
-        ${${_tgt}_SOURCES}
-        $<$<AND:$<BOOL:$<TARGET_PROPERTY:MAX_PACKAGE_VERSION_INFO>>,$<PLATFORM_ID:Windows>>:${MAXSDK_SOURCE_DIR}/script/verinfo.rc>
-)
+if(_glob_enabled)
+    file(GLOB_RECURSE _sources CONFIGURE_DEPENDS
+         "${CMAKE_CURRENT_SOURCE_DIR}/*.c"
+         "${CMAKE_CURRENT_SOURCE_DIR}/*.cpp")
+    target_sources(${_tgt} PRIVATE ${_sources})
+    unset(_sources)
+endif()
+unset(_glob_enabled)
 
 # Auto-set MAX_PACKAGE_JIT_GL and link OpenGL for jit.gl.* externals
 if(_tgt MATCHES "^jit\\.gl\\.")
@@ -164,10 +159,8 @@ elseif(WIN32)
         target_compile_options(${_tgt} PRIVATE /wd4814 /MP)
         set_target_properties(${_tgt} PROPERTIES LINK_FLAGS "/INCREMENTAL:NO")
     endif()
-    # ADD_VERINFO global set by max-package.cmake (legacy compat)
-    if(ADD_VERINFO)
-        target_sources(${_tgt} PRIVATE "${MAXSDK_SOURCE_DIR}/script/verinfo.rc")
-    endif()
+    target_sources(${_tgt} PRIVATE
+        $<$<BOOL:$<TARGET_PROPERTY:MAX_PACKAGE_VERSION_INFO>>:${MAXSDK_SOURCE_DIR}/script/verinfo.rc>)
 endif()
 
 unset(_output_name)
