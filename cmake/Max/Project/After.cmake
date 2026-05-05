@@ -1,3 +1,5 @@
+block()
+
 get_property(
     _is_ext
     DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}"
@@ -22,10 +24,7 @@ if(_glob_enabled)
     endforeach()
     file(GLOB_RECURSE _sources CONFIGURE_DEPENDS ${_globs})
     target_sources(${_tgt} PRIVATE ${_sources})
-    unset(_sources)
-    unset(_globs)
 endif()
-unset(_glob_enabled)
 
 # Auto-set MAX_PACKAGE_JIT_GL and link OpenGL for jit.gl.* externals
 if(_tgt MATCHES "^jit\\.gl\\.")
@@ -134,7 +133,6 @@ if(APPLE)
         POST_BUILD
         COMMAND "${CMAKE_COMMAND}" -E copy_if_different "${_scripts}/PkgInfo"
                 "${CMAKE_LIBRARY_OUTPUT_DIRECTORY}/${_output_name}.mxo/Contents/PkgInfo")
-    unset(_scripts)
     if(MAX_SDK_CODESIGN_EXTERNS)
         if(NOT DEFINED MAX_SDK_CODESIGN_IDENTITY)
             set(MAX_SDK_CODESIGN_IDENTITY "-")
@@ -148,7 +146,6 @@ if(APPLE)
                 set(MAX_SDK_CODESIGN_IDENTITY "-")
                 message(STATUS "Code signing with ad-hoc identity")
             endif()
-            unset(_security_output)
         endif()
         add_custom_command(
             TARGET ${_tgt}
@@ -166,5 +163,4 @@ elseif(WIN32)
         $<$<BOOL:$<TARGET_PROPERTY:MAX_PACKAGE_VERSION_INFO>>:${MAXSDK_SOURCE_DIR}/script/verinfo.rc>)
 endif()
 
-unset(_output_name)
-unset(_tgt)
+endblock()
