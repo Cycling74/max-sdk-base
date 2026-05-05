@@ -49,6 +49,9 @@ if (MaxSDK_Max_FOUND AND NOT TARGET Max::Max)
     # via the weak-undefined (-Wl,-U) linker flags. Linking directly against
     # MaxAPI.framework would introduce an unsatisfiable runtime dependency on
     # MaxAPIImpl.framework, so Max::Max is INTERFACE-only on macOS.
+    #
+    # This can be a proper non-INTERFACE library in the future if a .tbd is
+    # created alongside a framework.
     add_library(Max::Max INTERFACE IMPORTED GLOBAL)
     target_include_directories(Max::Max
       INTERFACE
