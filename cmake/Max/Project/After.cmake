@@ -16,11 +16,14 @@ get_property(_glob_enabled DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}" PROPERTY max:
 add_library(${_tgt} MODULE)
 
 if(_glob_enabled)
-    file(GLOB_RECURSE _sources CONFIGURE_DEPENDS
-         "${CMAKE_CURRENT_SOURCE_DIR}/*.c"
-         "${CMAKE_CURRENT_SOURCE_DIR}/*.cpp")
+    set(_globs "")
+    foreach(_ext IN LISTS CMAKE_C_SOURCE_FILE_EXTENSIONS CMAKE_CXX_SOURCE_FILE_EXTENSIONS)
+        list(APPEND _globs "${CMAKE_CURRENT_SOURCE_DIR}/*.${_ext}")
+    endforeach()
+    file(GLOB_RECURSE _sources CONFIGURE_DEPENDS ${_globs})
     target_sources(${_tgt} PRIVATE ${_sources})
     unset(_sources)
+    unset(_globs)
 endif()
 unset(_glob_enabled)
 
