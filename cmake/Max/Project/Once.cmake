@@ -15,13 +15,6 @@ set(CMAKE_MSVC_RUNTIME_LIBRARY "MultiThreaded$<$<CONFIG:Debug>:Debug>")
 # set(CMAKE_MSVC_RUNTIME_CHECKS "$<$<CONFIG:Debug,RelWithDebInfo>:StackFrameErrorCheck;UninitializedVariable>")
 add_compile_options($<$<AND:$<CONFIG:Debug>,$<CXX_COMPILER_ID:MSVC>>:/RTC1>)
 
-set(CMAKE_SHARED_MODULE_SUFFIX ".mxl_${CMAKE_SYSTEM_PROCESSOR}")
-if(CMAKE_SYSTEM_NAME STREQUAL "Windows")
-  set(CMAKE_SHARED_MODULE_SUFFIX ".mxe64")
-elseif(CMAKE_SYSTEM_NAME STREQUAL "Darwin")
-  unset(CMAKE_SHARED_MODULE_SUFFIX)
-endif()
-
 set_property(DIRECTORY PROPERTY BUNDLE_EXTENSION "mxo")
 
 if(DEFINED C74_LIBRARY_OUTPUT_DIRECTORY)

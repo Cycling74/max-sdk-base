@@ -6,12 +6,12 @@ find_library(MaxSDK_Max_LIBRARY
   PATH_SUFFIXES x64
   NO_DEFAULT_PATH)
 find_library(MaxSDK_MSP_LIBRARY
-  NAMES MaxAudio
+  NAMES MaxAudio MaxAudioAPI
   PATHS "${MAXSDK_SOURCE_DIR}/c74support/msp-includes"
   PATH_SUFFIXES x64
   NO_DEFAULT_PATH)
 find_library(MaxSDK_Jitter_LIBRARY
-  NAMES jitlib
+  NAMES jitlib JitterAPI
   PATHS "${MAXSDK_SOURCE_DIR}/c74support/jit-includes"
   PATH_SUFFIXES x64
   NO_DEFAULT_PATH)
