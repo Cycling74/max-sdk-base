@@ -1,10 +1,54 @@
 # max-sdk-base
-This folder contains the headers, libs, and script files you will need to compile an external object written in C or C++ used by the [Max Software Development Kit](https://github.com/Cycling74/max-sdk) and [Min-DevKit Package](https://github.com/Cycling74/min-devkit). Please refer to those repositories for additional documentation and best practices.
+
+This folder contains the core headers, libs, and script files you will need to compile a C or C++ external object for Max.  It is used by both the [Max Software Development Kit](https://github.com/Cycling74/max-sdk) and [Min-DevKit Package](https://github.com/Cycling74/min-devkit) example packages. Please refer to those repositories for additional documentation and best practices.
+
 
 ## Overview of Contents
 
 * `c74support` : header and lib files
-* `script` : resources to be included and used by CMake
+* `cmake` & `script`: resources to be included and used by CMake
+
+
+## Using max-sdk-base in your project
+
+There are two supported ways to bring max-sdk-base into your external's build.
+
+### FetchContent
+
+Include the following in your base CMakeLists.txt file. CMake will download max-sdk-base automatically at configure time:
+
+```cmake
+cmake_minimum_required(VERSION 3.25)
+
+include(FetchContent)
+FetchContent_Declare(
+    max-sdk-base
+    GIT_REPOSITORY https://github.com/Cycling74/max-sdk-base.git
+    GIT_TAG        main  # pin to a tag or commit hash for reproducible builds
+)
+FetchContent_MakeAvailable(max-sdk-base)
+
+project(my-package)
+add_subdirectory(source/my-external)
+```
+
+### Git submodule
+
+Add max-sdk-base as a submodule at a path of your choice, then include it via `add_subdirectory` before your first `project()` call:
+
+```cmake
+cmake_minimum_required(VERSION 3.25)
+
+add_subdirectory(max-sdk-base)
+
+project(my-package)
+add_subdirectory(source/my-external)
+```
+
+In both cases, the `Max::Max`, `Max::MSP`, and `Max::Jitter` imported targets are available for use with `target_link_libraries`.
+
+See the [max-sdk repository](https://github.com/Cycling74/max-sdk) for a complete example of how to structure the `CMakeLists.txt` for an external object.
+
 
 ## License
 

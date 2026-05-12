@@ -1,0 +1,35 @@
+cmake_minimum_required(VERSION 3.25)
+
+list(PREPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/cmake")
+
+find_package(Git QUIET)
+
+include(C74/PackageInfo)
+include(C74/Support)
+
+list(PREPEND CMAKE_PROJECT_TOP_LEVEL_INCLUDES "${CMAKE_CURRENT_SOURCE_DIR}/cmake/Max/Project/Once.cmake")
+list(PREPEND CMAKE_PROJECT_INCLUDE_BEFORE "${CMAKE_CURRENT_SOURCE_DIR}/cmake/Max/Project/Before.cmake")
+list(PREPEND CMAKE_PROJECT_INCLUDE "${CMAKE_CURRENT_SOURCE_DIR}/cmake/Max/Project/After.cmake")
+
+set(MAXSDK_SOURCE_DIR "${CMAKE_CURRENT_SOURCE_DIR}" CACHE INTERNAL "")
+
+if(NOT DEFINED CACHE{CMAKE_OSX_DEPLOYMENT_TARGET})
+  set(CMAKE_OSX_DEPLOYMENT_TARGET "10.11" CACHE STRING
+    "Minimum macOS deployment version")
+endif()
+
+# Better IDE Organization for internal targets
+set_property(GLOBAL PROPERTY PREDEFINED_TARGETS_FOLDER "CMake")
+# Removes CDash Targets when CTest is enabled
+set_property(GLOBAL PROPERTY CTEST_TARGETS_ADDED YES)
+
+# Removes the need for GetGitRevisionDescription.cmake
+set_property(DIRECTORY "${CMAKE_SOURCE_DIR}" APPEND
+  PROPERTY
+    CMAKE_CONFIGURE_DEPENDS "${CMAKE_SOURCE_DIR}/.git/HEAD")
+
+return(PROPAGATE
+  CMAKE_MODULE_PATH
+  CMAKE_PROJECT_INCLUDE
+  CMAKE_PROJECT_INCLUDE_BEFORE
+  CMAKE_PROJECT_TOP_LEVEL_INCLUDES)
