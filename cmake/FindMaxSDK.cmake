@@ -6,12 +6,12 @@ find_library(MaxSDK_Max_LIBRARY
   PATH_SUFFIXES x64
   NO_DEFAULT_PATH)
 find_library(MaxSDK_MSP_LIBRARY
-  NAMES MaxAudioAPI
+  NAMES MaxAudio
   PATHS "${MAXSDK_SOURCE_DIR}/c74support/msp-includes"
   PATH_SUFFIXES x64
   NO_DEFAULT_PATH)
 find_library(MaxSDK_Jitter_LIBRARY
-  NAMES JitterAPI
+  NAMES jitlib
   PATHS "${MAXSDK_SOURCE_DIR}/c74support/jit-includes"
   PATH_SUFFIXES x64
   NO_DEFAULT_PATH)
@@ -64,7 +64,7 @@ if (MaxSDK_Max_FOUND AND NOT TARGET Max::Max)
     target_include_directories(Max::Max
       INTERFACE
         "${MaxSDK_Max_INCLUDE_DIRS}")
-    set_property(TARGET Max::Max PROPERTY IMPORTED_IMPLIB "${MaxSDK_Max_LIBRARY}")
+    set_property(TARGET Max::Max PROPERTY IMPORTED_LOCATION "${MaxSDK_Max_LIBRARY}")
   endif()
 endif()
 
@@ -74,7 +74,7 @@ if (MaxSDK_MSP_FOUND AND NOT TARGET Max::MSP)
     INTERFACE
       "${MaxSDK_MSP_INCLUDE_DIRS}")
   if (WIN32)
-    set_property(TARGET Max::MSP PROPERTY IMPORTED_IMPLIB "${MaxSDK_MSP_LIBRARY}")
+    set_property(TARGET Max::MSP PROPERTY IMPORTED_LOCATION "${MaxSDK_MSP_LIBRARY}")
   else()
     set_property(TARGET Max::MSP PROPERTY IMPORTED_LOCATION "${MaxSDK_MSP_LIBRARY}")
   endif()
@@ -86,7 +86,7 @@ if (MaxSDK_Jitter_FOUND AND NOT TARGET Max::Jitter)
     INTERFACE
       "${MaxSDK_Jitter_INCLUDE_DIRS}")
   if (WIN32)
-    set_property(TARGET Max::Jitter PROPERTY IMPORTED_IMPLIB "${MaxSDK_Jitter_LIBRARY}")
+    set_property(TARGET Max::Jitter PROPERTY IMPORTED_LOCATION "${MaxSDK_Jitter_LIBRARY}")
   else()
     set_property(TARGET Max::Jitter PROPERTY IMPORTED_LOCATION "${MaxSDK_Jitter_LIBRARY}")
   endif()
