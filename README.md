@@ -50,6 +50,28 @@ In both cases, the `Max::Max`, `Max::MSP`, and `Max::Jitter` imported targets ar
 See the [max-sdk repository](https://github.com/Cycling74/max-sdk) for a complete example of how to structure the `CMakeLists.txt` for an external object.
 
 
+## CMake Options
+
+### Out-of-tree package build
+
+When `MAX_SDK_PACKAGE_OUT_OF_TREE` is `ON`, the build directory contains a
+fully assembled Max package which you can zip up to share with others without
+including source code or build-time files. You can also then symlink
+`build/package` directly into Max's Packages folder instead of the root
+repository, keeping source and build files separate.
+
+Enable it at configure time:
+
+```bash
+cmake -B build -DMAX_SDK_PACKAGE_OUT_OF_TREE=ON
+cmake --build build
+```
+
+Authored content directories (`help`, `init`, `media`, `support`, etc.) are
+copied at configure time. These files and directories are described here:
+https://docs.cycling74.com/userguide/packages/#package-folder-structure. To
+pick up changes to this content in the build directory, re-run cmake.
+
 ## License
 
 See the accompanying `License.md` file.
