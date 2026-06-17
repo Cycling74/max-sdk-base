@@ -6,7 +6,8 @@ This folder contains the core headers, libs, and script files you will need to c
 ## Overview of Contents
 
 * `c74support` : header and lib files
-* `cmake` & `script`: resources to be included and used by CMake
+* `cmake`: CMake modules — the recommended build system integration (see [max-sdk](https://github.com/Cycling74/max-sdk) for examples)
+* `script`: legacy CMake scripts, retained for backward compatibility while projects migrate
 
 
 ## Using max-sdk-base in your project
