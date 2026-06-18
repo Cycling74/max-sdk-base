@@ -32,7 +32,7 @@ C74_HIDDEN t_symbol *ps_toolbarvisible;
 
 // boxnotify
 C74_HIDDEN t_symbol *ps_newobject;
-C74_HIDDEN t_symbol *ps_free;
+//C74_HIDDEN t_symbol *ps_free; // already defined above
 C74_HIDDEN t_symbol *ps_redraw;
 C74_HIDDEN t_symbol *ps_redrawcontents; // textfield text has changed
 C74_HIDDEN t_symbol *ps_textchanged;
@@ -141,7 +141,7 @@ C74_HIDDEN t_symbol *ps_hint;
 C74_HIDDEN t_symbol *ps_hidden;
 //C74_HIDDEN t_symbol *ps_fontname;
 //C74_HIDDEN t_symbol *ps_fontsize;
-C74_HIDDEN t_symbol *ps_color;
+//C74_HIDDEN t_symbol *ps_color; // already defined above
 C74_HIDDEN t_symbol *ps_nextobject;
 C74_HIDDEN t_symbol *ps_prevobject;
 C74_HIDDEN t_symbol *ps_varname;
@@ -235,7 +235,7 @@ C74_HIDDEN t_symbol *ps_bredo;
 
 // Textfield attributes
 C74_HIDDEN t_symbol *ps_owner;
-C74_HIDDEN t_symbol *ps_textcolor;
+//C74_HIDDEN t_symbol *ps_textcolor; // already defined above
 C74_HIDDEN t_symbol *ps_textmargins;
 C74_HIDDEN t_symbol *ps_editonclick;
 C74_HIDDEN t_symbol *ps_selectallonedit;
